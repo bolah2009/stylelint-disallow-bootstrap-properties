@@ -10,7 +10,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 });
 
 const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
-	return function (root, result) {
+	return (root, result) => {
 		const validOptions = stylelint.utils.validateOptions(result, ruleName, {
 			actual: primaryOption,
 			possible: [true],
@@ -20,23 +20,24 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 			return;
 		}
 
-		root.walkRules(({ selector }) => {
+		root.walkDecls((decl) => {
+			// We can expose value with decl.value
+			const { prop, parent } = decl;
+
+			const { selector } = parent;
+
 			if (selector.includes(':')) {
 				return;
 			}
 
-			root.walkDecls((decl) => {
-				const { prop } = decl;
-
-				if (disallowedProperties[prop.replace(/^-\w+-/, '')]) {
-					stylelint.utils.report({
-						message: messages.rejected(prop),
-						node: decl,
-						result,
-						ruleName,
-					});
-				}
-			});
+			if (disallowedProperties[prop.replace(/^-\w+-/, '')] && !selector.includes(':')) {
+				stylelint.utils.report({
+					message: messages.rejected(prop),
+					node: decl,
+					result,
+					ruleName,
+				});
+			}
 		});
 	};
 });
