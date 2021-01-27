@@ -4,7 +4,7 @@
 const disallowedProperties = require('./disallowedProperties.js');
 const stylelint = require('stylelint');
 
-const ruleName = 'plugin/disallow-bootstrap-properties';
+const ruleName = 'plugin/stylelint-disallow-bootstrap-properties';
 const messages = stylelint.utils.ruleMessages(ruleName, {
 	rejected: (property) => `Unexpected property "${property}", use bootstrap class instead`,
 });

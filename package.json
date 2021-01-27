@@ -1,7 +1,7 @@
 {
-  "name": "disallow-bootstrap-properties",
-  "version": "1.0.1",
-  "description": "A stylelint plugin to disallow bootstap css properties",
+  "name": "stylelint-disallow-bootstrap-properties",
+  "version": "1.0.0",
+  "description": "A stylelint plugin to disallow bootstrap css properties",
   "keywords": [
     "css-in-js",
     "css",
@@ -14,8 +14,8 @@
     "stylelint",
     "stylelint-plugin"
   ],
-  "homepage": "https://github.com/bolah2009/disallow-bootstrap-properties",
-  "repository": "https://github.com/bolah2009/disallow-bootstrap-properties",
+  "homepage": "https://github.com/bolah2009/stylelint-disallow-bootstrap-properties",
+  "repository": "https://github.com/bolah2009/stylelint-disallow-bootstrap-properties",
   "license": "Apache",
   "author": "stylelint",
   "main": "index.js",
