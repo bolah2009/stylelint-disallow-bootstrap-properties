@@ -63,5 +63,19 @@ testRule({
 			column: 7,
 			description: 'When property is disallowed',
 		},
+		{
+			code: 'div { display: flex; } a:hover { display: inline; }',
+			message: messages.rejected('display'),
+			line: 1,
+			column: 7,
+			description: 'When property is disallowed with an additional allowed declaration',
+		},
+		{
+			code: 'div { color: red; display: inline; }',
+			message: messages.rejected('display'),
+			line: 1,
+			column: 19,
+			description: 'When property is disallowed with an additional allowed property',
+		},
 	],
 });
