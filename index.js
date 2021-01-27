@@ -6,7 +6,8 @@ const stylelint = require('stylelint');
 
 const ruleName = 'plugin/stylelint-disallow-bootstrap-properties';
 const messages = stylelint.utils.ruleMessages(ruleName, {
-	rejected: (property) => `Unexpected property "${property}", use bootstrap class instead`,
+	rejected: (property, altBootstrapClass) =>
+		`Unexpected property "${property}", use "${altBootstrapClass}" bootstrap class or it's breakpoint variant instead`,
 });
 
 const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
@@ -22,7 +23,7 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 		root.walkDecls((decl) => {
 			// We can expose value with decl.value
-			const { prop, parent } = decl;
+			const { prop, value, parent } = decl;
 
 			const { selector } = parent;
 
@@ -30,9 +31,18 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 				return;
 			}
 
-			if (disallowedProperties[prop.replace(/^-\w+-/, '')] && !selector.includes(':')) {
+			const unprefixedProp = prop.replace(/^-\w+-/, '');
+			const currentProp = disallowedProperties[unprefixedProp];
+
+			if (!currentProp) {
+				return;
+			}
+
+			const currentValue = currentProp.values[value];
+
+			if (currentValue) {
 				stylelint.utils.report({
-					message: messages.rejected(prop),
+					message: messages.rejected(prop, currentValue),
 					node: decl,
 					result,
 					ruleName,
