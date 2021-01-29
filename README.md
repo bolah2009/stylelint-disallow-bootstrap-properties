@@ -1,10 +1,10 @@
 # stylelint-disallow-bootstrap-properties
 
-A Stylelint plugin to disallow [bootstrap] CSS properties.
+A Stylelint plugin to disallow [bootstrap](https://getbootstrap.com/) CSS properties.
 
 ## Installation
 
-1. If you haven't, install [stylelint]:
+1. If you haven't, install [stylelint](https://stylelint.io/):
 
 ```
 npm install stylelint --save-dev
@@ -98,6 +98,3 @@ div {
   color: red;
   }
 ```
-
-[stylelint]: https://stylelint.io/
-[bootstrap]: https://getbootstrap.com/
