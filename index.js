@@ -10,6 +10,21 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 		`Unexpected property "${property}" with value "${value}", use "${altBootstrapClass}" bootstrap class or it's breakpoint variant instead`,
 });
 
+const queryChecker = ({ params, type }) => {
+	const bootstrapQueries = [
+		'max-width: 575.98px',
+		'max-width: 767.98px',
+		'max-width: 991.98px',
+		'max-width: 1199.98px',
+		'max-width: 1399.98px',
+	];
+
+	return !(
+		type === 'root' ||
+		(type === 'atrule' && bootstrapQueries.some((element) => params.includes(element)))
+	);
+};
+
 const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 	return (root, result) => {
 		const validOptions = stylelint.utils.validateOptions(result, ruleName, {
@@ -27,37 +42,26 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 			const { selector } = parent;
 
-			const { params, type } = parent.parent;
+			if (queryChecker(parent.parent)) {
+				return;
+			}
 
-			const bootstrapQueries = [
-				'max-width: 575.98px',
-				'max-width: 767.98px',
-				'max-width: 991.98px',
-				'max-width: 1199.98px',
-				'max-width: 1399.98px',
-			];
+			if (selector.includes(':')) {
+				return;
+			}
 
-			if (
-				type === 'root' ||
-				(type === 'atrule' && bootstrapQueries.some((element) => params.includes(element)))
-			) {
-				if (selector.includes(':')) {
-					return;
-				}
+			const unprefixedProp = prop.replace(/^-\w+-/, '');
+			const currentProp = disallowedProperties[unprefixedProp];
 
-				const unprefixedProp = prop.replace(/^-\w+-/, '');
-				const currentProp = disallowedProperties[unprefixedProp];
+			const altBootstrapClass = currentProp && currentProp.values[value];
 
-				const altBootstrapClass = currentProp && currentProp.values[value];
-
-				if (altBootstrapClass) {
-					stylelint.utils.report({
-						message: messages.rejected(prop, value, altBootstrapClass),
-						node: decl,
-						result,
-						ruleName,
-					});
-				}
+			if (altBootstrapClass) {
+				stylelint.utils.report({
+					message: messages.rejected(prop, value, altBootstrapClass),
+					node: decl,
+					result,
+					ruleName,
+				});
 			}
 		});
 	};
