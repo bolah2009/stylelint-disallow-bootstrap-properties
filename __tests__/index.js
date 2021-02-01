@@ -55,9 +55,6 @@ testRule({
 		},
 		{
 			code: "@media ('max-width: 800px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
 			description: 'When property is disallowed but media query is allowed',
 		},
 	],
