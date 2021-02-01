@@ -27,22 +27,37 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 			const { selector } = parent;
 
-			if (selector.includes(':')) {
-				return;
-			}
+			const { params, type } = parent.parent;
 
-			const unprefixedProp = prop.replace(/^-\w+-/, '');
-			const currentProp = disallowedProperties[unprefixedProp];
+			const bootstrapQueries = [
+				'max-width: 575.98px',
+				'max-width: 767.98px',
+				'max-width: 991.98px',
+				'max-width: 1199.98px',
+				'max-width: 1399.98px',
+			];
 
-			const altBootstrapClass = currentProp && currentProp.values[value];
+			if (
+				type === 'root' ||
+				(type === 'atrule' && bootstrapQueries.some((element) => params.includes(element)))
+			) {
+				if (selector.includes(':')) {
+					return;
+				}
 
-			if (altBootstrapClass) {
-				stylelint.utils.report({
-					message: messages.rejected(prop, value, altBootstrapClass),
-					node: decl,
-					result,
-					ruleName,
-				});
+				const unprefixedProp = prop.replace(/^-\w+-/, '');
+				const currentProp = disallowedProperties[unprefixedProp];
+
+				const altBootstrapClass = currentProp && currentProp.values[value];
+
+				if (altBootstrapClass) {
+					stylelint.utils.report({
+						message: messages.rejected(prop, value, altBootstrapClass),
+						node: decl,
+						result,
+						ruleName,
+					});
+				}
 			}
 		});
 	};
