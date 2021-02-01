@@ -42,7 +42,7 @@ testRule({
 			description: 'When property is allowed',
 		},
 		{
-			code: 'a { top: 2.5; color: pink; }',
+			code: 'a { top: 0; color: pink; }',
 			description: 'When two or more properties is allowed',
 		},
 		{
@@ -54,7 +54,12 @@ testRule({
 			description: 'When property is disallowed but uses psuedo element selector',
 		},
 		{
-			code: "@media ('max-width: 800px') { div { display: flex; } }",
+			code: "@media ('max-width: 850px') { div { display: flex; } }",
+			description: 'When property is disallowed but media query is allowed',
+		},
+		{
+			code:
+				"@media screen and ('max-width: 800px') and ('min-widh: 200px'){ div { display: flex; } }",
 			description: 'When property is disallowed but media query is allowed',
 		},
 	],
@@ -73,6 +78,14 @@ testRule({
 			line: 1,
 			column: 40,
 			description: 'When property and its parent is disallowed',
+		},
+		{
+			code: "@media ('max-width: 800px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 37,
+			description:
+				'When property and its parent is disallowed and the parent is close to Bootstrap breakpoints',
 		},
 		{
 			code: 'div { display: flex; } a:hover { display: inline; }',
