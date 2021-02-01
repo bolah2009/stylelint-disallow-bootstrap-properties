@@ -76,7 +76,6 @@ const properties = {
 	},
 	'flex-wrap': {
 		values: {
-			auto: 'flex-auto',
 			wrap: 'flex-wrap',
 			nowrap: 'flex-nowrap',
 			'wrap-reverse': 'flex-wrap-reverse',
