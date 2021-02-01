@@ -42,7 +42,7 @@ testRule({
 			description: 'When property is allowed',
 		},
 		{
-			code: 'a { top: 0; color: pink; }',
+			code: 'a { top: 2.5; color: pink; }',
 			description: 'When two or more properties is allowed',
 		},
 		{
@@ -53,6 +53,13 @@ testRule({
 			code: 'div::before { display: flex; }',
 			description: 'When property is disallowed but uses psuedo element selector',
 		},
+		{
+			code: "@media ('max-width: 800px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 40,
+			description: 'When property is disallowed but media query is allowed',
+		},
 	],
 
 	reject: [
@@ -62,6 +69,13 @@ testRule({
 			line: 1,
 			column: 7,
 			description: 'When property is disallowed',
+		},
+		{
+			code: "@media ('max-width: 575.98px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 40,
+			description: 'When property and its parent is disallowed',
 		},
 		{
 			code: 'div { display: flex; } a:hover { display: inline; }',
@@ -128,7 +142,7 @@ testRule({
 		},
 		{
 			code: 'div { color: red; flex-wrap: wrap-reverse; }',
-			message: messages.rejected('flex-wrap', 'auto', 'flex-wrap-reverse'),
+			message: messages.rejected('flex-wrap', 'wrap-reverse', 'flex-wrap-reverse'),
 			line: 1,
 			column: 19,
 			description: 'When property is disallowed with an additional allowed property',
