@@ -10,7 +10,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 		`Unexpected property "${property}" with value "${value}", use "${altBootstrapClass}" bootstrap class or it's breakpoint variant instead`,
 });
 
-const queryChecker = ({ params, type, name }) => {
+const useBootstrapMediaQuery = ({ params, type, name }) => {
 	const bootstrapQueries = [
 		'max-width: 575.98px',
 		'max-width: 767.98px',
@@ -20,28 +20,26 @@ const queryChecker = ({ params, type, name }) => {
 	];
 
 	if (type === 'root' || name !== 'media') {
-		return false;
+		return true;
 	}
 
 	// the regex outputs an array of all numbers in the sting.
-	const numbers = params.match(/(-\d+|\d+)(,\d+)*(\.\d+)*/g);
+	const numRegex = /(-\d+|\d+)(,\d+)*(\.\d+)*/g;
+	const numbers = params.match(numRegex);
 
 	if (numbers.length === 1) {
-		let result = true;
 		const n = numbers[0];
 
 		bootstrapQueries.forEach((e) => {
-			const width = e.match(/(-\d+|\d+)(,\d+)*(\.\d+)*/g)[0];
+			const width = e.match(numRegex)[0];
 
 			if (Math.abs(Number(width) - Number(n)) <= 50) {
-				result = false;
+				return true;
 			}
 		});
-
-		return result;
 	}
 
-	return true;
+	return false;
 };
 
 const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
@@ -61,7 +59,7 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 			const { selector } = parent;
 
-			if (queryChecker(parent.parent)) {
+			if (!useBootstrapMediaQuery(parent.parent)) {
 				return;
 			}
 
