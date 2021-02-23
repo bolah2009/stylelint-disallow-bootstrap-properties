@@ -62,6 +62,34 @@ testRule({
 				"@media screen and ('max-width: 800px') and ('min-width: 200px'){ div { display: flex; } }",
 			description: 'When property is disallowed but media query is allowed',
 		},
+		{
+			code: "@media ('max-width: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('width: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('min-width: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('max-height: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('min-height: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('height: 670px') { div { display: flex; } }",
+			description: 'When property and its media query is allowed',
+		},
+		{
+			code: "@media ('max-width: 870px') { div { display: flex; } }",
+			description: 'When media query is allowed and property is disallowed',
+		},
 	],
 
 	reject: [
@@ -71,56 +99,6 @@ testRule({
 			line: 1,
 			column: 7,
 			description: 'When property is disallowed',
-		},
-		{
-			code: "@media ('max-width: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('width: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('min-width: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('max-height: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('min-height: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('height: 575.98px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 40,
-			description: 'When property and its parent is disallowed',
-		},
-		{
-			code: "@media ('max-width: 800px') { div { display: flex; } }",
-			message: messages.rejected('display', 'flex', 'd-flex'),
-			line: 1,
-			column: 37,
-			description:
-				'When property and its parent is disallowed and the parent is close to Bootstrap breakpoints',
 		},
 		{
 			code: 'div { display: flex; } a:hover { display: inline; }',
