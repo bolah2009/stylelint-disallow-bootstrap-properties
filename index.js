@@ -27,7 +27,7 @@ const useBootstrapMediaQuery = ({ params, type, name }) => {
 	const numRegex = /(-\d+|\d+)(,\d+)*(\.\d+)*/g;
 	const numbers = params.match(numRegex);
 
-	if (numbers.length === 1) {
+	if (numbers.length === 1 && /max-width/g.test(params)) {
 		const n = numbers[0];
 
 		bootstrapQueries.forEach((e) => {
