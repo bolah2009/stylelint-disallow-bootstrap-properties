@@ -42,7 +42,7 @@ testRule({
 			description: 'When property is allowed',
 		},
 		{
-			code: 'a { top: 0; color: pink; }',
+			code: 'a { top: 30; color: pink; }',
 			description: 'When two or more properties is allowed',
 		},
 		{
@@ -128,7 +128,7 @@ testRule({
 		},
 		{
 			code: 'div { color: red; flex-wrap: wrap-reverse; }',
-			message: messages.rejected('flex-wrap', 'auto', 'flex-wrap-reverse'),
+			message: messages.rejected('flex-wrap', 'wrap-reverse', 'flex-wrap-reverse'),
 			line: 1,
 			column: 19,
 			description: 'When property is disallowed with an additional allowed property',
