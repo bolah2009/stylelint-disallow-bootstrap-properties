@@ -27,7 +27,7 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 			const { selector } = parent;
 
-			if (selector.includes(':')) {
+			if (selector && selector.includes(':')) {
 				return;
 			}
 
