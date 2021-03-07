@@ -53,6 +53,43 @@ testRule({
 			code: 'div::before { display: flex; }',
 			description: 'When property is disallowed but uses psuedo element selector',
 		},
+		{
+			code: "@media ('max-width: 850px') { div { display: flex; } }",
+			description: 'When property is disallowed but media query is not used by bootstrap',
+		},
+		{
+			code:
+				"@media screen and ('max-width: 800px') and ('min-width: 200px'){ div { display: flex; } }",
+			description: 'When property is disallowed but there are multiple media queries',
+		},
+		{
+			code: "@media ('max-width: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is max-width',
+		},
+		{
+			code: "@media ('width: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is width',
+		},
+		{
+			code: "@media ('min-width: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is min-width',
+		},
+		{
+			code: "@media ('max-height: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is max-height',
+		},
+		{
+			code: "@media ('min-height: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is min-height',
+		},
+		{
+			code: "@media ('height: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is height',
+		},
+		{
+			code: "@media ('max-width: 870px') { div { display: flex; } }",
+			description: 'When media query is disallowed and property is disallowed',
+		},
 	],
 
 	reject: [
@@ -128,7 +165,7 @@ testRule({
 		},
 		{
 			code: 'div { color: red; flex-wrap: wrap-reverse; }',
-			message: messages.rejected('flex-wrap', 'auto', 'flex-wrap-reverse'),
+			message: messages.rejected('flex-wrap', 'wrap-reverse', 'flex-wrap-reverse'),
 			line: 1,
 			column: 19,
 			description: 'When property is disallowed with an additional allowed property',
