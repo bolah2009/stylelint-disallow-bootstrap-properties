@@ -10,6 +10,36 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 		`Unexpected property "${property}" with value "${value}", use "${altBootstrapClass}" bootstrap class or it's breakpoint variant instead`,
 });
 
+const useBootstrapMediaQuery = ({ params, type, name }) => {
+	const bootstrapQueries = [
+		'max-width: 575.98px',
+		'max-width: 767.98px',
+		'max-width: 991.98px',
+		'max-width: 1199.98px',
+		'max-width: 1399.98px',
+	];
+
+	if (type === 'root' || name !== 'media') {
+		return true;
+	}
+
+	// the regex matches all numbers in a string.
+	const numRegex = /(-\d+|\d+)(,\d+)*(\.\d+)*/g;
+	const numbers = params.match(numRegex);
+
+	if (numbers.length === 1 && /max-width/g.test(params)) {
+		const firstNumber = numbers[0];
+
+		return bootstrapQueries.some((query) => {
+			const width = query.match(numRegex)[0];
+
+			return Math.abs(Number(width) - Number(firstNumber)) <= 50;
+		});
+	}
+
+	return false;
+};
+
 const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 	return (root, result) => {
 		const validOptions = stylelint.utils.validateOptions(result, ruleName, {
@@ -22,10 +52,9 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 		}
 
 		root.walkDecls((decl) => {
-			// We can expose value with decl.value
 			const { prop, value, parent } = decl;
 
-			const { selector } = parent;
+			const { selector, parent: grandParent } = parent;
 
 			if (selector && selector.includes(':')) {
 				return;
@@ -36,7 +65,7 @@ const rule = stylelint.createPlugin(ruleName, (primaryOption) => {
 
 			const altBootstrapClass = currentProp && currentProp.values[value];
 
-			if (altBootstrapClass) {
+			if (altBootstrapClass && useBootstrapMediaQuery(grandParent)) {
 				stylelint.utils.report({
 					message: messages.rejected(prop, value, altBootstrapClass),
 					node: decl,

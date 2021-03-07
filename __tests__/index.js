@@ -53,6 +53,35 @@ testRule({
 			code: 'div::before { display: flex; }',
 			description: 'When property is disallowed but uses psuedo element selector',
 		},
+		{
+			code:
+				"@media screen and ('max-width: 760px') and ('min-width: 200px') { div { display: flex; } }",
+			description: 'When property is disallowed but there are multiple media queries',
+		},
+		{
+			code: "@media ('width: 760px') { div { display: flex; } }",
+			description: 'When property is disallowed but its media query is allowed (width)',
+		},
+		{
+			code: "@media ('min-width: 760px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is allowed (min-width)',
+		},
+		{
+			code: "@media ('max-height: 760px') { div { display: flex; } }",
+			description: 'When property is disallowed and its media query is allowed (max-height)',
+		},
+		{
+			code: "@media ('min-height: 760px') { div { display: flex; } }",
+			description: 'When property is disallowed but its media query is allowed (min-height)',
+		},
+		{
+			code: "@media ('height: 670px') { div { display: flex; } }",
+			description: 'When property is disallowed but its media query is allowed (height)',
+		},
+		{
+			code: "@media ('max-width: 870px') { div { display: flex; } }",
+			description: 'When media query is disallowed but out of range and property is disallowed',
+		},
 	],
 
 	reject: [
@@ -132,6 +161,29 @@ testRule({
 			line: 1,
 			column: 19,
 			description: 'When property is disallowed with an additional allowed property',
+		},
+		{
+			code: "@media ('max-width: 760px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 37,
+			description:
+				'When media query is within the upper range of disallowed size and css property is disallowed',
+		},
+		{
+			code: "@media ('max-width: 720px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 37,
+			description:
+				'When media query is within the lower range of disallowed size and css property is disallowed',
+		},
+		{
+			code: "@media screen and ('max-width: 760px') { div { display: flex; } }",
+			message: messages.rejected('display', 'flex', 'd-flex'),
+			line: 1,
+			column: 48,
+			description: 'When both media query and css property is disallowed',
 		},
 	],
 });
