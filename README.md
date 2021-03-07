@@ -50,7 +50,7 @@ This rule ignores:
 - CSS pseudo-classes i.e. those prefixed with two colon
 - selectors that use variable interpolation e.g. `::#{$variable} {}`
 - Media Queries that are 50px more or less than the breakpoints used on Bootstrap
-- Media Queries that are note `max-width`
+- Media Queries that are not `max-width`
 
 ## Options
 
